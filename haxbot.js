@@ -19,7 +19,7 @@
 
 	room.setTeamsLock(true);
 
-	var adminPassword = 3971;
+	var adminPassword = 4002;
 	console.log("adminPassword : " + adminPassword);
 
 	/* STADIUM */
