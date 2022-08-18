@@ -8,7 +8,7 @@
 	const botName = "Juiz";
 	const maxPlayers = 15;
 	const roomPublic = true;
-	const geo = [{"lat": -22.3822, "lon": -43.1591, "code": "br"}, {"code": "FR", "lat": 46.2, "lon": 2.2}, {"code": "PL", "lat": 51.9, "lon": 19.1}, {"code": "GB", "lat": 55.3, "lon": -3.4}, {"code": "PT", "lat": 39.3, "lon": -8.2}];
+	const geo = [{"lat": -22.9201, "lon": -43.3307, "code": "br"}, {"code": "FR", "lat": 46.2, "lon": 2.2}, {"code": "PL", "lat": 51.9, "lon": 19.1}, {"code": "GB", "lat": 55.3, "lon": -3.4}, {"code": "PT", "lat": 39.3, "lon": -8.2}];
 
 	const room = HBInit({ roomName: roomName, maxPlayers: maxPlayers, public: roomPublic, playerName: botName, geo: geo[0] });
 
@@ -19,7 +19,7 @@
 
 	room.setTeamsLock(true);
 
-	var adminPassword = 4002;
+	var adminPassword = 3971;
 	console.log("adminPassword : " + adminPassword);
 
 	/* STADIUM */
@@ -58,19 +58,6 @@
 	var goldenGoal = false;
 	var SMSet = new Set(); // Set created to get slow mode which is useful in chooseMode
 	var banList = []; // Getting track of the bans, so we can unban ppl if we want
-
-	/* COLORS */
-
-	var welcomeColor = 0xc4ff65;
-	var announcementColor = 0xffefd6;
-	var infoColor = 0xbebebe;
-	var privateMessageColor = 0xffc933;
-	var redColor = 0xff4c4c;
-	var blueColor = 0x62cbff;
-	var warningColor = 0xffa135;
-	var errorColor = 0xa40000;
-	var successColor = 0x75ff75;
-	var defaultColor = null;
 	
 	/* STATS */
 
@@ -278,11 +265,11 @@
 		endGameVariable = true;
 		if (winner == Team.RED) {
 			streak++;
-			room.sendChat("🔴 Time vermelho venceu! " + scores.red + " - " + scores.blue + " | Sequência de Vitória(s): " + streak + " 🏆");
+			room.sendChat("🔴 Time vermelho venceu! [" + scores.red + " - " + scores.blue + "] | Sequência de Vitória(s): " + streak + " 🏆");
 		}
 		else if (winner == Team.BLUE) {
 			streak = 1;
-			room.sendChat("🔵 Time azul venceu! " + scores.blue + " - " + scores.red + " | Sequência de Vitória(s): " + streak + " 🏆");
+			room.sendChat("🔵 Time azul venceu! [" + scores.blue + " - " + scores.red + "] | Sequência de Vitória(s): " + streak + " 🏆");
 		}
 		else {
 			streak = 0;
@@ -307,7 +294,12 @@
 	function activateChooseMode() {
 		inChooseMode = true;
 		slowMode = 2;
-		room.sendChat("🐢 Modo lento de 2 segundos, ativado!");
+		//room.sendChat("🙋‍♂️ Modo de recrutamento, iniciado!");
+		room.sendAnnouncement(
+			`Juiz: 🙋‍♂️ Modo de recrutamento, iniciado!`,
+			0xFFFFFF,
+			'bold',
+		);
 	}
 
 	function deactivateChooseMode() {
@@ -315,7 +307,12 @@
 		clearTimeout(timeOutCap);
 		if (slowMode != 0) {
 			slowMode = 0;
-			room.sendChat("🐢 O modo lento foi encerrado.");
+			//room.sendChat("🙋‍♂️ O modo de recrutamento foi encerrado.");
+			room.sendAnnouncement(
+				`Juiz: 🙋‍♂️ O modo de recrutamento foi encerrado.`,
+				0xFFFFFF,
+				'bold',
+			);
 		}
 		redCaptainChoice = "";
 		blueCaptainChoice = "";
@@ -427,7 +424,7 @@
 				if (teamR.length < teamB.length) {
 					if (scores.blue - scores.red == 2) {
 						endGame(Team.BLUE);
-						room.sendChat("🤖 Ragequit detectado. O jogo terminou 🤖");
+						room.sendChat("🤖 Ragequit detectado. O jogo terminou");
 						setTimeout(() => { room.stopGame(); }, 100);
 						return;
 					}
@@ -435,7 +432,7 @@
 				else {
 					if (scores.red - scores.blue == 2) {
 						endGame(Team.RED);
-						room.sendChat("🤖 Ragequit detectado. O jogo terminou 🤖");
+						room.sendChat("🤖 Ragequit detectado. O jogo terminou");
 						setTimeout(() => { room.stopGame(); }, 100);
 						return;
 					}
@@ -451,7 +448,7 @@
 				return;
 			}
 			if (Math.abs(teamR.length - teamB.length) == teamS.length) {
-				room.sendChat("🤖 Sem escolhas, deixe-me lidar com esta situação 🤖");
+				room.sendChat("🤖 Sem escolhas, deixe-me lidar com esta situação");
 				deactivateChooseMode();
 				resumeGame();
 				var b = teamS.length;
@@ -469,7 +466,7 @@
 			}
 			if (streak == 0 && room.getScores() == null) {
 				if (Math.abs(teamR.length - teamB.length) == 2) { // if someone left a team has 2 more players than the other one, put the last chosen guy back in his place so it's fair
-					room.sendChat("🤖 Equilibrando equipes... 🤖");
+					room.sendChat("🤖 Equilibrando equipes...");
 					teamR.length > teamB.length ? room.setPlayerTeam(teamR[teamR.length - 1].id, Team.SPECTATORS) : room.setPlayerTeam(teamB[teamB.length - 1].id, Team.SPECTATORS);
 				}
 			}
@@ -745,12 +742,19 @@
 	room.onPlayerJoin = function(player) {
 		extendedP.push([player.id, player.auth, player.conn, false, 0, 0, false]);
 		updateRoleOnPlayerIn();
-		room.sendChat("👋🏼 E aí, " + player.name + "! Seja bem-vindo(a) ao ECC Futsal!", player.id, welcomeColor, 'bold',);
-		room.sendChat("Lembre-se, aqui nós jogamos apenas por diversão!");
+		//room.sendChat("👋🏼 E aí, " + player.name + "! Seja bem-vindo(a) ao ECC Futsal!", player.id, welcomeColor, 'bold',);
+		//room.sendAnnouncement("👋🏼 E aí, " , player.id , "! Seja bem-vindo ao ECC Futsal!", 0x00BFF , "bold", 1);
+		room.sendAnnouncement(
+			`👋🏼 E aí, ${player.name}! Seja bem-vindo(a) ao ECC Futsal!\nLembre-se, aqui nós jogamos apenas por diversão!`,
+			player.id,
+			0xFFFF00,
+			'bold',
+		);
+		//room.sendChat("Lembre-se, aqui nós jogamos apenas por diversão!");
 		if (localStorage.getItem(player.auth) != null) {
 			if (JSON.parse(localStorage.getItem(player.auth))[Ss.RL] != "player") {
 				room.setPlayerAdmin(player.id, true);
-				room.sendChat((JSON.parse(localStorage.getItem(player.auth))[Ss.RL] == "master" ? "Master " : "O Administrador ") + player.name + " se conectou!");
+				room.sendChat((JSON.parse(localStorage.getItem(player.auth))[Ss.RL] == "master" ? "O Administrador " : "O Administrador ") + player.name + " se conectou!");
 			}
 		}
 	}
@@ -1109,7 +1113,7 @@
 			if (player.admin) {
 				if (message.length == 1) {
 					room.clearBans();
-					room.sendChat("Lista de banimentos foi limpa!");
+					room.sendChat("📜 Lista de banimentos foi limpa!");
 					banList = [];
 				}
 				if (message.length == 2) {
@@ -1236,6 +1240,7 @@
 				}
 			}
 		}
+	
 	}
 
 	room.onPlayerActivity = function(player) {
