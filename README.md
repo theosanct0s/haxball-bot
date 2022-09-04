@@ -5,7 +5,7 @@
 
 ### 🤔 About
 - A bot to organize both your room 100% automatic
-- This project is from my room, "ECC | Futsal" that I'm releasing to everyone 🙂
+- This project is from my room. I'm releasing to everyone 🙂
 
 ### ✨ What is included?
 
