@@ -19,6 +19,23 @@ This simple bot has some features, among them are:
   - Notifies you when the match is over, with advanced statistics
 - ✅ Admin system
 - ✅ Ban system
+  
+### 📬 New features:
+- 🌟 Insult filter
+  - Block unwanted words for your server
+- 🌟 Randomized uniform system
+  - With each new match, both teams' uniforms are changed randomly (customizable uniforms)
+- 🌟 Ranking system
+  - Ranking system by the number of player goals (customizable)
+
+### 📪 It's coming:
+- ⏳ Game recording system
+  - Record your desired match and send it directly to your Discord server using a Webhook
+- ⏳ Register / login system
+  - Being able to use MongoDB or not
+- ⏳ Send a message to the team only
+- ⏳ Store system
+- ⏳ Slots reserved for VIPs/staff
 
 and much more!
 
