@@ -4,9 +4,9 @@
 
 	/* ROOM */
 
-	const roomName = "⚽ ECC x3 | Futsal |";
+	const roomName = "𝐟𝐮𝐭𝐬𝐚𝐥 | 𝐱𝟑 |";
 	const botName = "Juiz";
-	const maxPlayers = 15;
+	const maxPlayers = 25;
 	const roomPublic = true;
 	const geo = [{"lat": -22.9201, "lon": -43.3307, "code": "br"}, {"code": "FR", "lat": 46.2, "lon": 2.2}, {"code": "PL", "lat": 51.9, "lon": 19.1}, {"code": "GB", "lat": 55.3, "lon": -3.4}, {"code": "PT", "lat": 39.3, "lon": -8.2}];
 
@@ -33,7 +33,7 @@
 
 	/* OPTIONS */
 
-	var afkLimit = 20;
+	var afkLimit = 12;
 	var drawTimeLimit = Infinity;
 	var maxTeamSize = 3; // This works for 1 (you might want to adapt things to remove some useless stats in 1v1 like assist or cs), 2, 3 or 4
 	var slowMode = 0;
@@ -106,6 +106,10 @@
 		this.scores = scores;
 		this.goals = goals;
 	}
+
+	const frasesGOL = [" Olha esse gol do ", " É GOOOOOL do ", " Que golaço do "]; // Frases de gol
+	const frasesASS = [" com o lindo passe de ", " Deixou na boca do gol ", " Que bolão, lindo passe! "]; // Frases de assistencias
+	const golcontra = [" Tenho certeza que foi sem querer né, ", " Bem, dessa vez foi de propóstivo ", " É GOOOOOL contra do "]; // Frases de gol contra	
 
 	/* FUNCTIONS */
 
@@ -294,12 +298,7 @@
 	function activateChooseMode() {
 		inChooseMode = true;
 		slowMode = 2;
-		//room.sendChat("🙋‍♂️ Modo de recrutamento, iniciado!");
-		room.sendAnnouncement(
-			`Juiz: 🙋‍♂️ Modo de recrutamento, iniciado!`,
-			0xFFFFFF,
-			'bold',
-		);
+		room.sendChat("🙋‍♂️ Modo de recrutamento, iniciado!");
 	}
 
 	function deactivateChooseMode() {
@@ -307,12 +306,7 @@
 		clearTimeout(timeOutCap);
 		if (slowMode != 0) {
 			slowMode = 0;
-			//room.sendChat("🙋‍♂️ O modo de recrutamento foi encerrado.");
-			room.sendAnnouncement(
-				`Juiz: 🙋‍♂️ O modo de recrutamento foi encerrado.`,
-				0xFFFFFF,
-				'bold',
-			);
+			room.sendChat("🙋‍♂️ O modo de recrutamento foi encerrado.");
 		}
 		redCaptainChoice = "";
 		blueCaptainChoice = "";
@@ -355,11 +349,11 @@
 		}
 		for (var i = 0; i < extendedP.length ; i++) {
 			if (extendedP[i][eP.ACT] == 60 * (2/3 * afkLimit)) {
-				room.sendChat("[PV] ⛔ @" + room.getPlayer(extendedP[i][eP.ID]).name + ", se você não mover ou enviar uma mensagem nos próximos " + Math.floor(afkLimit / 3) + " segundos, você será kickado!", extendedP[i][eP.ID]);
+				room.sendChat("[PV] ⛔ @" + room.getPlayer(extendedP[i][eP.ID]).name + ", se você não se mexer nos próximos " + Math.floor(afkLimit / 3) + " segundos, você sera kickado!", extendedP[i][eP.ID]);
 			}
 			if (extendedP[i][eP.ACT] >= 60 * afkLimit) {
 				extendedP[i][eP.ACT] = 0;
-	            if (room.getScores().time <= afkLimit - 0.5) {
+				if (room.getScores().time <= afkLimit - 0.5) {
 					setTimeout(() => { !inChooseMode ? quickRestart() : room.stopGame(); }, 10);
 				}
 				room.kickPlayer(extendedP[i][eP.ID], "AFK", false);
@@ -745,7 +739,7 @@
 		//room.sendChat("👋🏼 E aí, " + player.name + "! Seja bem-vindo(a) ao ECC Futsal!", player.id, welcomeColor, 'bold',);
 		//room.sendAnnouncement("👋🏼 E aí, " , player.id , "! Seja bem-vindo ao ECC Futsal!", 0x00BFF , "bold", 1);
 		room.sendAnnouncement(
-			`👋🏼 E aí, ${player.name}! Seja bem-vindo(a) ao ECC Futsal!\nLembre-se, aqui nós jogamos apenas por diversão!`,
+			`👋🏼 E aí, ${player.name}! Seja bem-vindo(a) ao 𝐒𝐲𝐧𝐚𝐩𝐬𝐞 Futsal!\nLembre-se, aqui nós jogamos apenas por diversão!`,
 			player.id,
 			0xFFFF00,
 			'bold',
@@ -833,7 +827,17 @@
 
 	/* PLAYER ACTIVITY */
 
+	let
+	palavras = ["fdp", "porra", "arrombado"],
+	regex = new RegExp(palavras.join("|"), 'gi');
+
 	room.onPlayerChat = function (player, message) {
+		if (message.match(regex)) {
+			room.sendAnnouncement("Sem xingar.", player.id);
+			return false;
+		}
+        msg = message;
+        originalMessage = message;
 		message = message.split(/ +/);
 		player.team != Team.SPECTATORS ? setActivity(player, 0) : null;
 		if (["!help"].includes(message[0].toLowerCase())) {
@@ -1181,7 +1185,7 @@
 						}
 						else {
 							room.setPlayerTeam(teamS[Number.parseInt(message[0]) - 1].id, Team.RED);
-							room.sendChat(player.name + " recrutou: " + teamS[Number.parseInt(message[0]) - 1].name + " !");
+							room.sendChat(player.name + " recrutou: " + teamS[Number.parseInt(message[0]) - 1].name + "!");
 							return false;
 						}
 					}
@@ -1222,6 +1226,41 @@
 				}
 			}
 		}
+
+        if (localStorage.getItem(getAuth(player))){ // elo definido por vitórias
+            stats = JSON.parse(localStorage.getItem(getAuth(player)));
+            if (stats[Ss.WI] > 399){
+            room.sendAnnouncement("🔥 「𝐆𝐎𝐀𝐓」" + player.name + ": " + msg + "", null, 0xFF8000)
+            } else if (stats[Ss.WI] > 199){
+            room.sendAnnouncement("🔸 「𝗦𝘂𝗽𝗲𝗿-𝗘𝘀𝘁𝗿𝗲𝗹𝗹𝗮」:" + player.name + ": " + msg + "", null, 0x0040FF)
+            } else if (stats[Ss.WI] > 179){
+            room.sendAnnouncement("🔹 「𝗘𝘀𝘁𝗿𝗲𝗹𝗹𝗮」" + player.name + ": " + msg + "", null, 0xFF7900)
+            } else if (stats[Ss.WI] > 159){
+            room.sendAnnouncement("✓ 「𝗖𝗮𝗺𝗽𝗲𝗼𝗻」" + player.name + ": " + msg + "", null, 0xFFFF00)
+            } else if (stats[Ss.WI] > 129){
+            room.sendAnnouncement("👑 「𝗖𝗿𝗮𝗰𝗸」" + player.name + ": " + msg + "", null, 0xFFC375)
+            } else if (stats[Ss.WI] > 89){
+            room.sendAnnouncement("💲 「𝗟𝗲𝘆𝗲𝗻𝗱𝗮」" + player.name + ": " + msg + "", null, 0xBFFF00)
+            } else if (stats[Ss.WI] > 69){
+            room.sendAnnouncement("👿 「𝐄𝐱𝐩𝐞𝐫𝐭𝐨」" + player.name + ": " + msg + "", null, 0xEC77CE)
+            } else if (stats[Ss.WI] > 59){
+            room.sendAnnouncement("💪 「𝗥𝗲𝘃𝗲𝗹𝗮𝗰𝗶𝗼𝗻」" + player.name + ": " + msg + "", null, 0xFA58DF)
+            } else if (stats[Ss.WI] > 44){
+            room.sendAnnouncement("👽 「𝗩𝗲𝘁𝗲𝗿𝗮𝗻𝗼」" + player.name + ": " + msg + "", null, 0x73EC59)
+            } else if (stats[Ss.WI] > 34){
+            room.sendAnnouncement("👿 「𝗜𝗺𝗽𝗮𝗿𝗮𝗯𝗹𝗲」" + player.name + ": " + msg + "", null, 0xFE2E2E)
+            } else if (stats[Ss.WI] > 24){
+            room.sendAnnouncement("⚽ 「𝗣𝗿𝗼𝗳𝗲𝘀𝗶𝗼𝗻𝗮𝗹」" + player.name + ": " + msg + "", null, 0x04B404)
+            } else if (stats[Ss.WI] > 14){
+            room.sendAnnouncement("😎 「𝗔𝗽𝗿𝗲𝗻𝗱𝗶𝘇」" + player.name + ": " + msg + "", null, 0x2EFEF7)
+            } else if (stats[Ss.WI] > 4){
+            room.sendAnnouncement("🎖️ 「𝗣𝗿𝗶𝗻𝗰𝗶𝗽𝗶𝗮𝗻𝘁𝗲」" + player.name + ": " + msg + "", null, 0xDDD4DB)
+            } else {
+            room.sendAnnouncement("㋡ 「𝗜𝗻𝗶𝗰𝗶𝗮𝗻𝘁𝗲」"  + player.name + ": " + msg + "", null, 0xDDD4DB)
+            }
+            return false;
+            }
+
 		if (message[0][0] == "!") {
 			return false;
 		}
@@ -1243,6 +1282,156 @@
 	
 	}
 
+	var teamIDs = [{ Index: 0, Name: "Spectators" }, { Index: 1, Name: "Os times irão se enfrentar boa sorte aos dois!" }, { Index: 2, Name: "         x" }];
+
+	var teams = [
+		{ ID: 1, longName: "KF Tirana", uniform: [{ angle: 0, mainColor: [0x0059AB, 0xFFFFFF, 0x0059AB], avatarColor: 0xFFCA03 }, { angle: 0, mainColor: [0xFFCA03], avatarColor: 0x0059AB }] },
+		{ ID: 2, longName: "Club Atlético Boca Juniors", uniform: [{ angle: 0, mainColor: [0x103F79, 0xF3B229, 0x103F79], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0xFFFFFF], avatarColor: 0x103F79 }] },
+		{ ID: 3, longName: "Club Atlético River Plate", uniform: [{ angle: 30, mainColor: [0xFFFFFF, 0xFF0000, 0xFFFFFF], avatarColor: 0x000000 }, { angle: 0, mainColor: [0x000000, 0x404040, 0x000000], avatarColor: 0xFF0000 }] },
+		{ ID: 4, longName: "Melbourne City FC", uniform: [{ angle: 0, mainColor: [0x7AB2E1], avatarColor: 0xE31934 }, { angle: 0, mainColor: [0x000000], avatarColor: 0xE31934 }] },
+		{ ID: 5, longName: "FC Red Bull Salzburg", uniform: [{ angle: 15, mainColor: [0xFF0000, 0xFFFFFF, 0xFF0000], avatarColor: 0x000000 }, { angle: 15, mainColor: [0x000080, 0xFFFF00, 0x000080], avatarColor: 0xFFFFFF }] },
+		{ ID: 6, longName: "SK Sturm Graz", uniform: [{ angle: 0, mainColor: [0xFFFFFF, 0x000000, 0xFFFFFF], avatarColor: 0x00C000 }, { angle: 0, mainColor: [0x000000], avatarColor: 0x00C000 }] },
+		{ ID: 7, longName: "FK BATE Borisov", uniform: [{ angle: 0, mainColor: [0xFFFF00, 0x0080FF, 0xFFFF00], avatarColor: 0x000000 }, { angle: 0, mainColor: [0xFFFF00], avatarColor: 0x0080FF }] },
+		{ ID: 8, longName: "FK Gomel", uniform: [{ angle: 0, mainColor: [0xFFFFFF, 0x00C000, 0xFFFFFF], avatarColor: 0x000000 }, { angle: 0, mainColor: [0x000000, 0x00FF00, 0x000000], avatarColor: 0xFFFFFF }] },
+		{ ID: 9, longName: "Club Brugge KV", uniform: [{ angle: 0, mainColor: [0x000000, 0x0000FF, 0x000000], avatarColor: 0xFFFFFF }, { angle: 45, mainColor: [0xFFFFFF, 0xC0C0C0, 0xFFFFFF], avatarColor: 0x0000FF }] },
+		{ ID: 10, longName: "KAA Gent", uniform: [{ angle: 0, mainColor: [0x0000FF], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0xFFFF00], avatarColor: 0x0000FF }] },
+		{ ID: 11, longName: "KRC Genk", uniform: [{ angle: 0, mainColor: [0x000080, 0x0000FF, 0x000080], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0x000000, 0xFFFFFF, 0x000000], avatarColor: 0x0000FF }] },
+		{ ID: 12, longName: "Royal Antwerp FC", uniform: [{ angle: 90, mainColor: [0xC00000, 0xFF0000, 0xC00000], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0xFFFF00, 0xFFFF00, 0x000000], avatarColor: 0xFF0000 }] },
+		{ ID: 13, longName: "RSC Anderlecht", uniform: [{ angle: 0, mainColor: [0x8000FF, 0x400080, 0x8000FF], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0xFFFFFF, 0xC0C0C0, 0xFFFFFF], avatarColor: 0x8000FF }] },
+		{ ID: 14, longName: "CR Flamengo", uniform: [{ angle: 90, mainColor: [0x000000, 0xFF0000, 0x000000], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0xFFFFFF, 0x000000, 0xFFFFFF], avatarColor: 0xFF0000 }] },
+		{ ID: 15, longName: "Santos FC", uniform: [{ angle: 0, mainColor: [0xC00000, 0xFF4000, 0xC00000], avatarColor: 0x000000 }, { angle: 0, mainColor: [0xFF4000, 0xC00000], avatarColor: 0x000000 }] },
+		{ ID: 16, longName: "São Paulo FC", uniform: [{ angle: 0, mainColor: [0xFFFFFF, 0xE0E0E0, 0xFFFFFF], avatarColor: 0x000000 }, { angle: 0, mainColor: [0x000000, 0xFFFFFF, 0x000000], avatarColor: 0xFFFF00 }] },
+		{ ID: 17, longName: "SC Corinthians Paulista", uniform: [{ angle: 90, mainColor: [0xFFFFFF, 0x000000, 0xFFFFFF], avatarColor: 0x808080 }, { angle: 90, mainColor: [0x000000, 0xFFFFFF, 0x000000], avatarColor: 0x008000 }] },
+		{ ID: 18, longName: "SE Palmeiras", uniform: [{ angle: 90, mainColor: [0x008000, 0xFFFFFF, 0x008000], avatarColor: 0xFFFFC0 }, { angle: 0, mainColor: [0xFFFFFF, 0x008000, 0xFFFFFF], avatarColor: 0xFFFFC0 }] },
+		{ ID: 19, longName: "PFK Ludogorets Razgrad", uniform: [{ angle: 75, mainColor: [0x008000, 0xFFFFFF, 0x008000], avatarColor: 0x000000 }, { angle: 0, mainColor: [0x008000], avatarColor: 0xFFFFFF }] },
+		{ ID: 20, longName: "Beijing Guoan FC", uniform: [{ angle: 0, mainColor: [0x00C000, 0x008000, 0x00C000], avatarColor: 0xFFFF00 }, { angle: 0, mainColor: [0x80FF00, 0xFFFFFF, 0x80FF00], avatarColor: 0xFFFF00 }] },
+		{ ID: 21, longName: "Guangzhou FC", uniform: [{ angle: 90, mainColor: [0xFF4000, 0xFFFFFF, 0xFF4000], avatarColor: 0x000000 }, { angle: 90, mainColor: [0xFFFF00, 0x808080, 0xFFFF00], avatarColor: 0xFFFFFF }] },
+		{ ID: 22, longName: "GNK Dinamo Zagreb", uniform: [{ angle: 45, mainColor: [0x000080, 0x0000FF, 0x000080], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0xFF8000, 0xFFFF00, 0xFFFF00], avatarColor: 0x0000FF }] },
+		{ ID: 23, longName: "Sparta Prague", uniform: [{ angle: 0, mainColor: [0x800000, 0xFFFFFF, 0x000000], avatarColor: 0xFFC000 }, { angle: 0, mainColor: [0xFFFFFF, 0x800000, 0xFFFFFF], avatarColor: 0xFFC000 }] },
+		{ ID: 24, longName: "FC Viktoria Plzeň", uniform: [{ angle: 0, mainColor: [0x0000FF, 0xFF0000, 0x0000FF], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0x000000, 0x0000FF, 0xFF0000], avatarColor: 0xFFFFFF }] },
+		{ ID: 25, longName: "SK Sigma Olomouc", uniform: [{ angle: 0, mainColor: [0x4080C0, 0xFFFFFF, 0x4080C0], avatarColor: 0x000000 }, { angle: 0, mainColor: [0xFF0000, 0xC00000, 0xFF0000], avatarColor: 0x0000FF }] },
+		{ ID: 26, longName: "SK Slavia Prague", uniform: [{ angle: 0, mainColor: [0xFF0000, 0xFFFFFF], avatarColor: 0x000000 }, { angle: 0, mainColor: [0x0060C0, 0x0080FF], avatarColor: 0x000000 }] },
+		{ ID: 27, longName: "Brøndby IF", uniform: [{ angle: 90, mainColor: [0xFFFF00, 0x0000FF, 0x0000FF], avatarColor: 0x000000 }, { angle: 0, mainColor: [0x404040, 0x808080, 0x404040], avatarColor: 0xFFFF00 }] },
+		{ ID: 28, longName: "Copenhagen FC", uniform: [{ angle: 0, mainColor: [0xFFFFFF], avatarColor: 0x0000FF }, { angle: 90, mainColor: [0x000080, 0x000000, 0x000000], avatarColor: 0xFFFFFF }] },
+		{ ID: 29, longName: "FC Midtjylland", uniform: [{ angle: 90, mainColor: [0x000000, 0x000000, 0xFFFFFF], avatarColor: 0xFF0000 }, { angle: 90, mainColor: [0x804080, 0x000080, 0x000080], avatarColor: 0xFFFFFF }] },
+		{ ID: 30, longName: "FC Nordsjælland", uniform: [{ angle: 0, mainColor: [0xFF0000], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0x0080FF], avatarColor: 0xFFFFFF }] },
+		{ ID: 31, longName: "Al Ahly", uniform: [{ angle: 90, mainColor: [0xFF0000, 0xFFFFFF, 0xFF0000], avatarColor: 0xC0C000 }, { angle: 90, mainColor: [0xC0C0C0, 0x000000, 0xC0C000], avatarColor: 0xC0C000 }] },
+		{ ID: 32, longName: "AS Monaco FC", uniform: [{ angle: 120, mainColor: [0xFF0000, 0xFFFFFF, 0xFFFFFF], avatarColor: 0xC0C000 }, { angle: 0, mainColor: [0x000000], avatarColor: 0xC0C000 }] },
+		{ ID: 33, longName: "AS Saint-Étienne", uniform: [{ angle: 90, mainColor: [0x00C000, 0xFFFFFF, 0x00C000], avatarColor: 0x000000 }, { angle: 90, mainColor: [0xFFFFFF, 0x00C000, 0xFFFFFF], avatarColor: 0x000000 }] },
+		{ ID: 34, longName: "Lille OSC", uniform: [{ angle: 90, mainColor: [0xFF0000, 0x000080, 0x000080], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0xFFFFFF, 0xFFFFFF, 0x000000], avatarColor: 0x000080 }] },
+		{ ID: 35, longName: "Olympique Lyonnais", uniform: [{ angle: 0, mainColor: [0xFFFFFF, 0xFF0000, 0x0000FF], avatarColor: 0x000000 }, { angle: 0, mainColor: [0xFF0000], avatarColor: 0x0000FF }] },
+		{ ID: 36, longName: "Olympique Marseille", uniform: [{ angle: 0, mainColor: [0x00C0FF, 0xFFFFFF, 0x00C0FF], avatarColor: 0x000000 }, { angle: 90, mainColor: [0x404080, 0x202040, 0x00C0FF], avatarColor: 0xFFFFFF }] },
+		{ ID: 37, longName: "Paris Saint Germain FC", uniform: [{ angle: 0, mainColor: [0x000080], avatarColor: 0xFF0000 }, { angle: 0, mainColor: [0xFFFFFF, 0xFFFFFF, 0x000080], avatarColor: 0xFF0000 }] },
+		{ ID: 38, longName: "Bayer 04 Leverkusen", uniform: [{ angle: 90, mainColor: [0xFF0000, 0x000000, 0xFF0000], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0xFFFFFF, 0xC0C0C0, 0xFFFFFF], avatarColor: 0xFF0000 }] },
+		{ ID: 39, longName: "Bayern Munchen", uniform: [{ angle: 90, mainColor: [0xFF0000, 0xC00000, 0xFF0000], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0x000000, 0x404040, 0x000000], avatarColor: 0xC0C000 }] },
+		{ ID: 40, longName: "Borussia Dortmund", uniform: [{ angle: 90, mainColor: [0xFFFF00, 0x000000, 0xFFFF00], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0x000000], avatarColor: 0xFFFF00 }] },
+		{ ID: 41, longName: "FC Schalke 04", uniform: [{ angle: 90, mainColor: [0x0000FF, 0xFFFFFF, 0x0000FF], avatarColor: 0x000000 }, { angle: 90, mainColor: [0xFFFFFF, 0x000080, 0xFFFFFF], avatarColor: 0x00FFFF }] },
+		{ ID: 42, longName: "RB Leipzig", uniform: [{ angle: 90, mainColor: [0xFFFFFF, 0xFF0000, 0xFF0000], avatarColor: 0xFFC000 }, { angle: 90, mainColor: [0x000000], avatarColor: 0xC0C000 }] },
+		{ ID: 43, longName: "VfL Wolfsburg", uniform: [{ angle: 0, mainColor: [0x00FF00], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0x000000, 0x00FF00, 0x000000], avatarColor: 0xFFFFFF }] },
+		{ ID: 44, longName: "AEK", uniform: [{ angle: 45, mainColor: [0x000000, 0xFFFF00, 0x000000], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0x000000, 0xFFFF00, 0xFFFF00], avatarColor: 0xFFFFFF }] },
+		{ ID: 45, longName: "Olympiacos", uniform: [{ angle: 0, mainColor: [0xFFFFFF, 0xFF0000, 0xFFFFFF], avatarColor: 0x000000 }, { angle: 90, mainColor: [0xC0C0C0, 0xFFFFFF, 0xC0C0C0], avatarColor: 0x000000 }] },
+		{ ID: 46, longName: "Panathinaikos FC", uniform: [{ angle: 0, mainColor: [0x00C060], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0xFFFFFF], avatarColor: 0x00C060 }] },
+		{ ID: 47, longName: "PAOK", uniform: [{ angle: 0, mainColor: [0xFFFFFF, 0x000000, 0xFFFFFF], avatarColor: 0x008080 }, { angle: 0, mainColor: [0x000000, 0x404040, 0x000000], avatarColor: 0xFFFFFF }] },
+		{ ID: 48, longName: "Beitar Jerusalem FC", uniform: [{ angle: 0, mainColor: [0x000000, 0xFFFF00, 0x000000], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0x000000], avatarColor: 0xFFFF00 }] },
+		{ ID: 49, longName: "Hapoel Be'er Sheva FC", uniform: [{ angle: 90, mainColor: [0xFF0000, 0xFFFFFF, 0xFFFFFF], avatarColor: 0x000000 }, { angle: 90, mainColor: [0xE0E0E0, 0xFFFFFF, 0xFFFFFF], avatarColor: 0xFF0000 }] },
+		{ ID: 50, longName: "Maccabi Haifa FC", uniform: [{ angle: 0, mainColor: [0xFFFFFF, 0x008000], avatarColor: 0x000000 }, { angle: 90, mainColor: [0x404040, 0x000000, 0x404040], avatarColor: 0xFFFFFF }] },
+		{ ID: 51, longName: "Maccabi Tel Aviv FC", uniform: [{ angle: 90, mainColor: [0xFFFF00, 0x0000FF, 0xFFFF00], avatarColor: 0x000000 }, { angle: 90, mainColor: [0x000000, 0x000000, 0xFFFF00], avatarColor: 0xFFFFFF }] },
+		{ ID: 52, longName: "AC Milan", uniform: [{ angle: 0, mainColor: [0xFF0000, 0x000000, 0xFF0000], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0xFEDCBA], avatarColor: 0x800000 }] },
+		{ ID: 53, longName: "AS Roma FC", uniform: [{ angle: 90, mainColor: [0xC00000, 0xFFC000, 0xC00000], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0x000080, 0x0000C0, 0x000080], avatarColor: 0xFFFFFF }] },
+		{ ID: 54, longName: "FC Internazionale Milano", uniform: [{ angle: 0, mainColor: [0x000080, 0x0000FF, 0x000080], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0x000000, 0x0000FF, 0x000000], avatarColor: 0xFFFFFF }] },
+		{ ID: 55, longName: "Juventus FC", uniform: [{ angle: 0, mainColor: [0xFFFFFF, 0x000000, 0xFFFFFF], avatarColor: 0xFFFF00 }, { angle: 0, mainColor: [0x404040], avatarColor: 0xFFFF00 }] },
+		{ ID: 56, longName: "SSC Napoli", uniform: [{ angle: 90, mainColor: [0x0080FF, 0xFFFFFF, 0x0080FF], avatarColor: 0x000080 }, { angle: 0, mainColor: [0x808000, 0xFFFFFF, 0x808000], avatarColor: 0x000080 }] },
+		{ ID: 57, longName: "Torino FC", uniform: [{ angle: 90, mainColor: [0x800000, 0xFFFFFF, 0x000000], avatarColor: 0xFFC000 }, { angle: 45, mainColor: [0xFFFFFF, 0x800000, 0xFFFFFF], avatarColor: 0xFFC000 }] },
+		{ ID: 58, longName: "Kashima Antlers", uniform: [{ angle: 90, mainColor: [0xFF0000, 0xC0C0C0, 0x000000], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0xC0C0C0, 0xFFFFFF, 0xFFFFFF], avatarColor: 0xFF0000 }] },
+		{ ID: 59, longName: "Kawasaki Frontale", uniform: [{ angle: 90, mainColor: [0x0080FF, 0x0080FF, 0x000040], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0xC0C0C0, 0xC0C0C0, 0xFFFFFF], avatarColor: 0x0080FF }] },
+		{ ID: 60, longName: "Tigres UANL", uniform: [{ angle: 0, mainColor: [0xFFC000], avatarColor: 0x0000FF }, { angle: 0, mainColor: [0xC0D0E0], avatarColor: 0xFFC000 }] },
+		{ ID: 61, longName: "AFC AJAX", uniform: [{ angle: 0, mainColor: [0xFFFFFF, 0xFF0000, 0xFFFFFF], avatarColor: 0x000000 }, { angle: 90, mainColor: [0x000080, 0x0000FF, 0x000080], avatarColor: 0xFFFFFF }] },
+		{ ID: 62, longName: "AZ Alkmaar", uniform: [{ angle: 60, mainColor: [0xFF0000, 0xFFFFFF], avatarColor: 0x000000 }, { angle: 0, mainColor: [0x404040, 0x000000, 0x404040], avatarColor: 0xFFFFFF }] },
+		{ ID: 63, longName: "FC Twente", uniform: [{ angle: 0, mainColor: [0xC00000], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0x000080, 0xC00000, 0x000080], avatarColor: 0xFFFFFF }] },
+		{ ID: 64, longName: "Feyenoord", uniform: [{ angle: 0, mainColor: [0xFF0000, 0xFFFFFF], avatarColor: 0x202020 }, { angle: 0, mainColor: [0xC0C0C0, 0x808080], avatarColor: 0xFFFFFF }] },
+		{ ID: 65, longName: "PSV Eindhoven", uniform: [{ angle: 90, mainColor: [0xFF0000, 0x000000, 0xFFFFFF], avatarColor: 0xC0C000 }, { angle: 0, mainColor: [0x203040], avatarColor: 0xA0E0A0 }] },
+		{ ID: 66, longName: "Molde FK", uniform: [{ angle: 90, mainColor: [0x0000FF, 0xFFFFFF, 0xFFFFFF], avatarColor: 0x000000 }, { angle: 90, mainColor: [0xFFFFFF, 0x0000FF, 0x0000FF], avatarColor: 0x000000 }] },
+		{ ID: 67, longName: "Tromsø IL", uniform: [{ angle: 0, mainColor: [0xFF0000, 0xFFC000, 0xFF0000], avatarColor: 0xFFC000 }, { angle: 0, mainColor: [0x000000, 0xFFC000, 0x000000], avatarColor: 0xFFFFFF }] },
+		{ ID: 68, longName: "Legia Warszawa", uniform: [{ angle: 150, mainColor: [0xFFFFFF, 0xFFFFFF, 0x008000], avatarColor: 0xFF0000 }, { angle: 90, mainColor: [0x00C000, 0x008000, 0x008000], avatarColor: 0xFFFFFF }] },
+		{ ID: 69, longName: "KKS Lech Poznań", uniform: [{ angle: 0, mainColor: [0x0000C0, 0x000080, 0x0000C0], avatarColor: 0xFFFF00 }, { angle: 0, mainColor: [0xFFFFFF, 0xC0C0C0, 0xFFFFFF], avatarColor: 0x0000FF }] },
+		{ ID: 70, longName: "FC Porto", uniform: [{ angle: 0, mainColor: [0x0000FF, 0xFFFFFF, 0x0000FF], avatarColor: 0x000000 }, { angle: 90, mainColor: [0x000080, 0x000000, 0x000080], avatarColor: 0xFFFFFF }] },
+		{ ID: 71, longName: "SC Braga", uniform: [{ angle: 90, mainColor: [0xFF0000, 0xFFFFFF, 0xFF0000], avatarColor: 0xC0C000 }, { angle: 0, mainColor: [0x006030], avatarColor: 0xC0C000 }] },
+		{ ID: 72, longName: "SL Benfica", uniform: [{ angle: 90, mainColor: [0xFF0000, 0xFFFFFF, 0xFF0000], avatarColor: 0x000000 }, { angle: 90, mainColor: [0x000000, 0xFFFFFF, 0x000000], avatarColor: 0xFF0000 }] },
+		{ ID: 73, longName: "Sporting CP", uniform: [{ angle: 90, mainColor: [0x00C000, 0xFFFFFF, 0x00C000], avatarColor: 0xFFC000 }, { angle: 90, mainColor: [0xC0FF00, 0x000000, 0xC0FF00], avatarColor: 0x00C000 }] },
+		{ ID: 74, longName: "CFR Cluj", uniform: [{ angle: 0, mainColor: [0x800000, 0xFFFFFF, 0x800000], avatarColor: 0x000000 }, { angle: 0, mainColor: [0xFFFFFF], avatarColor: 0x800000 }] },
+		{ ID: 75, longName: "FCSB", uniform: [{ angle: 0, mainColor: [0xFF0000, 0x0000FF, 0xFF0000], avatarColor: 0xFFFF00 }, { angle: 90, mainColor: [0xFFFFFF, 0xA0C0E0, 0xFFFFFF], avatarColor: 0xFFC000 }] },
+		{ ID: 76, longName: "FC Dynamo Moscow", uniform: [{ angle: 0, mainColor: [0x0080FF], avatarColor: 0xC0C000 }, { angle: 90, mainColor: [0xFFFFFF], avatarColor: 0x0080FF }] },
+		{ ID: 77, longName: "FC Krasnodar", uniform: [{ angle: 0, mainColor: [0x000000, 0x008000, 0x000000], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0x008080, 0x00FFFF, 0x00FFFF], avatarColor: 0x000000 }] },
+		{ ID: 78, longName: "FC Spartak Moscow", uniform: [{ angle: 60, mainColor: [0xC00000, 0xFFFFFF, 0xC00000], avatarColor: 0x000000 }, { angle: 90, mainColor: [0xFFFFFF, 0xFF0000, 0xFFFFFF], avatarColor: 0x000000 }] },
+		{ ID: 79, longName: "FK Zenit", uniform: [{ angle: 0, mainColor: [0x0080FF], avatarColor: 0xC0C000 }, { angle: 90, mainColor: [0xFFFFFF], avatarColor: 0x0080FF }] },
+		{ ID: 80, longName: "Lokomotiv Moscow", uniform: [{ angle: 90, mainColor: [0x008000, 0xFF0000, 0x008000], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0xFFFFFF, 0xFF0000, 0xFFFFFF], avatarColor: 0x008000 }] },
+		{ ID: 81, longName: "PFC CSKA Moscow", uniform: [{ angle: 90, mainColor: [0xC00030, 0x3000C0, 0x3000C0], avatarColor: 0xFFC000 }, { angle: 90, mainColor: [0xC0C0C0, 0xFFFFFF, 0xFFFFFF], avatarColor: 0x000000 }] },
+		{ ID: 82, longName: "Celtic FC", uniform: [{ angle: 90, mainColor: [0xFFFFFF, 0x00C000, 0xFFFFFF], avatarColor: 0x000000 }, { angle: 0, mainColor: [0x008000], avatarColor: 0xC0C000 }] },
+		{ ID: 83, longName: "Glasgow Rangers", uniform: [{ angle: 90, mainColor: [0x0080FF, 0xFFFFFF, 0x000000], avatarColor: 0xFF0000 }, { angle: 90, mainColor: [0x000000, 0x000000, 0xFF0000], avatarColor: 0xFFFFFF }] },
+		{ ID: 84, longName: "FK Crvena Zvezda", uniform: [{ angle: 55, mainColor: [0xFFFFFF, 0xFF0000, 0xFF0000], avatarColor: 0x000000 }, { angle: 0, mainColor: [0x003030], avatarColor: 0xFFFFFF }] },
+		{ ID: 85, longName: "FK Partizan Belgrade", uniform: [{ angle: 90, mainColor: [0xFFFFFF, 0x000000, 0x000000], avatarColor: 0x808080 }, { angle: 0, mainColor: [0xFFFFFF], avatarColor: 0x000000 }] },
+		{ ID: 86, longName: "Athletic Bilbao", uniform: [{ angle: 0, mainColor: [0xFF0000, 0xFFFFFF, 0xFF0000], avatarColor: 0x000000 }, { angle: 0, mainColor: [0x80FF80], avatarColor: 0x000000 }] },
+		{ ID: 87, longName: "Atlético Madrid", uniform: [{ angle: 0, mainColor: [0xFF0000, 0xFFFFFF, 0xFF0000], avatarColor: 0x000000 }, { angle: 90, mainColor: [0x000080, 0xFF0000, 0xFF0000], avatarColor: 0xFFFFFF }] },
+		{ ID: 88, longName: "FC Barcelona", uniform: [{ angle: 0, mainColor: [0x004D98, 0xA50044, 0x004D98], avatarColor: 0xFFED02 }, { angle: 0, mainColor: [0xD0C0E0], avatarColor: 0xFFFFFF }] },
+		{ ID: 89, longName: "Real Madrid CF", uniform: [{ angle: 135, mainColor: [0xFFFFFF, 0x004996, 0xFFFFFF], avatarColor: 0xFCBF00 }, { angle: 90, mainColor: [0x004996], avatarColor: 0xFCBF00 }] },
+		{ ID: 90, longName: "Sevilla FC", uniform: [{ angle: 0, mainColor: [0xFFFFFF, 0xFF0000, 0xFFFFFF], avatarColor: 0xC0C000 }, { angle: 0, mainColor: [0xFF0000, 0xFFFFFF, 0xFF0000], avatarColor: 0x000000 }] },
+		{ ID: 91, longName: "Valencia CF", uniform: [{ angle: 0, mainColor: [0xFFDF1C, 0xEE3524, 0xFFDF1C], avatarColor: 0x000000 }, { angle: 90, mainColor: [0xC00000], avatarColor: 0xFFDF1C }] },
+		{ ID: 92, longName: "AIK Stockholm", uniform: [{ angle: 0, mainColor: [0x003155, 0xFFEE00, 0x003155], avatarColor: 0xC9AD00 }, { angle: 0, mainColor: [0xFFEE00], avatarColor: 0x000000 }] },
+		{ ID: 93, longName: "Malmö FF", uniform: [{ angle: 90, mainColor: [0x2F97DA, 0xFFFFFF, 0x2F97DA], avatarColor: 0x000000 }, { angle: 0, mainColor: [0x174B6D], avatarColor: 0x2F97DA }] },
+		{ ID: 94, longName: "FC Basel", country: "Switzerland", uniform: [{ angle: 0, mainColor: [0xFF0000, 0x0000FF], avatarColor: 0xFFC000 }, { angle: 90, mainColor: [0x000000, 0xFFFFFF, 0xFFFFFF], avatarColor: 0x0000FF }] },
+		{ ID: 95, longName: "Zurich FK", country: "Switzerland", uniform: [{ angle: 0, mainColor: [0xFFFFFF, 0xC0C0C0, 0xFFFFFF], avatarColor: 0x000000 }, { angle: 0, mainColor: [0x000000, 0x404040, 0x000000], avatarColor: 0xFFFFFF }] },
+		{ ID: 96, longName: "Beşiktaş JK", country: "Turkey", uniform: [{ angle: 0, mainColor: [0x000000, 0xFFFFFF, 0x000000], avatarColor: 0xFF0000 }, { angle: 0, mainColor: [0x000000], avatarColor: 0xFFFFFF }] },
+		{ ID: 97, longName: "Bursaspor SK", country: "Turkey", uniform: [{ angle: 0, mainColor: [0x02863A, 0xFFFFFF, 0x02863A], avatarColor: 0x000000 }, { angle: 135, mainColor: [0xFFFFFF, 0xC0C0C0, 0xFFFFFF], avatarColor: 0x02863A }] },
+		{ ID: 98, longName: "Fenerbahçe SK", country: "Turkey", uniform: [{ angle: 0, mainColor: [0x000080, 0xFFFF00, 0x000080], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0xE0E0C0, 0xC0C0A0, 0xE0E0C0], avatarColor: 0x000080 }] },
+		{ ID: 99, longName: "Galatasaray SK", country: "Turkey", uniform: [{ angle: 45, mainColor: [0xFDB912, 0xA90432], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0x000000], avatarColor: 0xFDB912 }] },
+		{ ID: 100, longName: "Istanbul Başakşehir FK", uniform: [{ angle: 90, mainColor: [0xFF8000, 0x000080, 0xFF8000], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0x000080, 0xFF8000, 0x000080], avatarColor: 0xFFFFFF }] },
+		{ ID: 101, longName: "Trabzonspor SK", uniform: [{ angle: 0, mainColor: [0x800000, 0x0080FF, 0x800000], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0x000080, 0x0000C0, 0x000080], avatarColor: 0xFFFFFF }] },
+		{ ID: 102, longName: "Arsenal FC", uniform: [{ angle: 0, mainColor: [0xFFFFFF, 0xFF0000, 0xFFFFFF], avatarColor: 0x808000 }, { angle: 0, mainColor: [0xFFFF80], avatarColor: 0x000000 }] },
+		{ ID: 103, longName: "Chelsea FC", uniform: [{ angle: 0, mainColor: [0x034694], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0xFFFF00, 0x000000, 0xFFFF00], avatarColor: 0xFFFFFF }] },
+		{ ID: 104, longName: "Liverpool FC", uniform: [{ angle: 0, mainColor: [0xC00000], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0xFEDCBA, 0x000000, 0xFEDCBA], avatarColor: 0xFFFFFF }] },
+		{ ID: 105, longName: "Manchester United FC", uniform: [{ angle: 90, mainColor: [0xFF0000, 0xFFFFFF, 0x000000], avatarColor: 0xFFFF00 }, { angle: 90, mainColor: [0x00C0FF, 0x0080FF, 0x00C0FF], avatarColor: 0xFF0000 }] },
+		{ ID: 106, longName: "Manchester City FC", uniform: [{ angle: 0, mainColor: [0x00C0FF], avatarColor: 0xFFFFFF }, { angle: 0, mainColor: [0xFFFFFF], avatarColor: 0x00C0FF }] },
+		{ ID: 107, longName: "Tottenham Hotspur FC", uniform: [{ angle: 90, mainColor: [0xFFFFFF, 0x000080, 0x000080], avatarColor: 0xFF0000 }, { angle: 90, mainColor: [0x000080, 0x000040, 0x000040], avatarColor: 0xFFFFFF }] },
+		{ ID: 108, longName: "Dynamo Kyiv", uniform: [{ angle: 90, mainColor: [0x176FC1, 0xFFFFFF, 0xFFFFFF], avatarColor: 0xBF851E }, { angle: 90, mainColor: [0x176FC1, 0x000040, 0x000040], avatarColor: 0xBF851E }] },
+		{ ID: 109, longName: "Karpaty Lviv", uniform: [{ angle: 0, mainColor: [0x037B4F], avatarColor: 0xEAB306 }, { angle: 90, mainColor: [0xFFFFFF, 0x037B4F, 0x037B4F], avatarColor: 0xEAB306 }] },
+		{ ID: 110, longName: "Metallist Kharkiv", uniform: [{ angle: 0, mainColor: [0xFFC000], avatarColor: 0x000080 }, { angle: 0, mainColor: [0x000080], avatarColor: 0xFFC000 }] },
+		{ ID: 111, longName: "Shakhtar Donetsk", uniform: [{ angle: 90, mainColor: [0xFF8000, 0x000000, 0xFF8000], avatarColor: 0xFFFFFF }, { angle: 90, mainColor: [0x000000, 0xFF8000, 0x000000], avatarColor: 0xFFFFFF }] },
+		{ ID: 112, longName: "LA Galaxy", uniform: [{ angle: 0, mainColor: [0xFFFFFF], avatarColor: 0x000080 }, { angle: 0, mainColor: [0x000000, 0x008000, 0x000000], avatarColor: 0xFFFFFF }] },
+	];
+	
+	function getRandomIntegers(length) {
+		var randomInts = [0, 0];
+		var numbers = [];
+		if (!isNaN(length)) {
+			for (var n = 1; n <= length; n++) {
+				numbers.push(n);
+			}
+		}
+		for (var i = 0; i < randomInts.length; i++) {
+			randomInts[i] = numbers[Math.floor(Math.random() * numbers.length)];
+			if (i < randomInts.length - 1) {
+				var index = numbers.indexOf(randomInts[i]);
+				index !== -1 ? numbers.splice(index, 1) : console.log("Error in deleting random number");
+			}
+		}
+		return randomInts;
+	}
+	
+	function randomUniforms() {
+			var randomInts = getRandomIntegers(teams.length);
+			var t = [{ int: randomInts[0], teamID: 1 }, { int: randomInts[1], teamID: 2 }];
+			t.forEach(x => {
+				var index = teams.findIndex(team => team.ID == x.int);
+				var tindex = t.findIndex(o => o.teamID == x.teamID);
+				if (index !== -1) {
+					room.setTeamColors(x.teamID, teams[x.int - 1].uniform[tindex].angle, teams[x.int - 1].uniform[tindex].avatarColor, teams[x.int - 1].uniform[tindex].mainColor);
+					room.sendAnnouncement(` ${teamIDs[x.teamID].Name}`, null, 0xFF0000, 'bold');
+					room.sendAnnouncement(` ${teams[x.int - 1].longName}`, null, 0x05C5FF, 'bold');
+				}
+			}
+		);
+	}
+
 	room.onPlayerActivity = function(player) {
 		setActivity(player, 0);
 	}
@@ -1259,6 +1448,7 @@
 	/* GAME MANAGEMENT */
 
 	room.onGameStart = function(byPlayer) {
+		randomUniforms();
 		game = new Game(Date.now(), room.getScores(), []);
 		countAFK = true;
 		activePlay = false;
@@ -1369,17 +1559,21 @@
 		const scores = room.getScores();
 		game.scores = scores;
 		if (lastPlayersTouched[0] != null && lastPlayersTouched[0].team == team) {
-			if (lastPlayersTouched[1] != null && lastPlayersTouched[1].team == team) {
-				room.sendChat("⚽👥 " + getTime(scores) + " É GOOOOOL, do " + lastPlayersTouched[0].name + "! Com a belíssima assistência de " + lastPlayersTouched[1].name + " | Velocidade do chute: " + ballSpeed.toPrecision(4).toString() + "km/h " + (team == Team.RED ? "🔴" : "🔵"));
+		if (lastPlayersTouched[1] != null && lastPlayersTouched[1].team == team) {
+			var frasegol = frasesGOL[(Math.random() * frasesGOL.length) | 0]
+			var fraseasis = frasesASS[(Math.random() * frasesASS.length) | 0]
+				room.sendChat("⚽👥 " + getTime(scores) + frasegol + lastPlayersTouched[0].name + fraseasis + lastPlayersTouched[1].name + " | Velocidade do chute: " + ballSpeed.toPrecision(4).toString() + "km/h " + (team == Team.RED ? "🔴" : "🔵"));
 				game.goals.push(new Goal(scores.time, team, lastPlayersTouched[0], lastPlayersTouched[1]));
 			}
 			else {
-				room.sendChat("⚽ " + getTime(scores) + " É GOOOOOL, do " + lastPlayersTouched[0].name + "! | Velocidade do chute: " + ballSpeed.toPrecision(4).toString() + "km/h " + (team == Team.RED ? "🔴" : "🔵"));
+				var frasegol = frasesGOL[(Math.random() * frasesGOL.length) | 0]
+				room.sendChat("⚽ " + getTime(scores) + frasegol + lastPlayersTouched[0].name + "! | Velocidade do chute: " + ballSpeed.toPrecision(4).toString() + "km/h " + (team == Team.RED ? "🔴" : "🔵"));
 				game.goals.push(new Goal(scores.time, team, lastPlayersTouched[0], null));
 			}
 		}
 		else {
-			room.sendChat("🤡 " + getTime(scores) + " Que vergonha! Gol contra do " + lastPlayersTouched[0].name + "! | Velocidade do chute: " + ballSpeed.toPrecision(4).toString() + "km/h " + (team == Team.RED ? "🔴" : "🔵"));
+			var fraseautogol = golcontra[(Math.random() * golcontra.length) | 0]
+			room.sendChat("🤡 " + getTime(scores) + fraseautogol + lastPlayersTouched[0].name + "! | Velocidade do chute: " + ballSpeed.toPrecision(4).toString() + "km/h " + (team == Team.RED ? "🔴" : "🔵"));
 			game.goals.push(new Goal(scores.time, team, null, null));
 		}
 		if (scores.scoreLimit != 0 && (scores.red == scores.scoreLimit || scores.blue == scores.scoreLimit && scores.blue > 0 || goldenGoal == true)) {
