@@ -20,7 +20,7 @@ This simple bot has some features, among them are:
 - ✅ Admin system
 - ✅ Ban system
   
-### 📬 New features:
+### 📬 [09/24/22] New features: 
 - 🌟 Insult filter
   - Block unwanted words for your server
 - 🌟 Randomized uniform system
