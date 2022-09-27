@@ -19,7 +19,22 @@
 
 	room.setTeamsLock(true);
 
-	var adminPassword = 3971;
+	let Cor = {
+		Vermelho: 0xFA5646,
+		Laranja: 0xFF5E3B,
+		Verde: 0x7DFA89,
+		Azul: 0x05C5FF,
+		Amrelo: 0xFFFF17,
+		Cinza: 0xCCCCCC,
+		Branco: 0xFFFFFF,
+		Azulclaro: 0x6ECAFF,
+		Azulescuro: 0x426AD6
+	}
+
+	const Negrito = 'bold';
+	const Normal = 'normal';
+
+	var adminPassword = 4002;
 	console.log("adminPassword : " + adminPassword);
 
 	/* STADIUM */
@@ -108,8 +123,10 @@
 	}
 
 	const frasesGOL = [" Olha esse gol do ", " É GOOOOOL do ", " Que golaço do "]; // Frases de gol
-	const frasesASS = [" com o lindo passe de ", " Deixou na boca do gol ", " Que bolão, lindo passe! "]; // Frases de assistencias
-	const golcontra = [" Tenho certeza que foi sem querer né, ", " Bem, dessa vez foi de propóstivo ", " É GOOOOOL contra do "]; // Frases de gol contra	
+	const frasesASS = [" com o lindo passe de ", " acompanhado do belíssimo passe de ", " com o bolão na boca do gol de "]; // Frases de assistencias
+	const golcontra = [" Tenho certeza que foi sem querer né, ", " Bem, dessa vez foi de propóstivo, ", " É GOOOOOL contra do "]; // Frases de gol contra
+	
+	const goleiro = [" é um homem? não, é uma barreira! ", " não deixa passar uma ", " é o melhor GK do mundo? "]; // Frases de goleiro
 
 	/* FUNCTIONS */
 
@@ -277,7 +294,7 @@
 		}
 		else {
 			streak = 0;
-			room.sendChat("💤 Tempo limite alcançado... 💤");
+			room.sendChat("💤 Tempo limite alcançado");
 	    }
 	    room.sendChat("📊 Posse de Bola: 🔴 " + (Rposs*100).toPrecision(3).toString() + "% | " + (Bposs*100).toPrecision(3).toString() + "% 🔵");
 	    scores.red == 0 ? (scores.blue == 0 ? room.sendChat("🏆 " + GKList[0].name + " é um homem? não, é uma barreira! " + GKList[1].name + " não tomou gol. ") : room.sendChat("🏆 é um homem? não, é uma barreira! " + GKList[1].name + " não tomou nenhum gol ")) : scores.blue == 0 ? room.sendChat("🏆 é um homem? não, é uma barreira! " + GKList[0].name + " não tomou nenhum gol ") : null;
@@ -748,7 +765,7 @@
 		if (localStorage.getItem(player.auth) != null) {
 			if (JSON.parse(localStorage.getItem(player.auth))[Ss.RL] != "player") {
 				room.setPlayerAdmin(player.id, true);
-				room.sendChat((JSON.parse(localStorage.getItem(player.auth))[Ss.RL] == "master" ? "O Administrador " : "O Administrador ") + player.name + " se conectou!");
+				room.sendAnnouncement((JSON.parse(localStorage.getItem(player.auth))[Ss.RL] == "master" ? "O Administrador " : "O Administrador ") + player.name + " se conectou!");
 			}
 		}
 	}
@@ -760,7 +777,7 @@
 		}
 		if (getAFK(changedPlayer) && changedPlayer.team != Team.SPECTATORS) {
 			room.setPlayerTeam(changedPlayer.id, Team.SPECTATORS);
-			room.sendChat(changedPlayer.name + " está AFK! 😴");
+			room.sendAnnouncement(changedPlayer.name + " está AFK! 😴", Cor.Laranja, bold);
 			return;
 		}
 		updateTeams();
@@ -858,7 +875,8 @@
 				room.setPlayerTeam(player.id, Team.SPECTATORS);
 			}
 			setAFK(player, !getAFK(player));
-			room.sendChat(player.name + (getAFK(player) ? " está AFK! 😴" : " não está mais AFK!"));
+			room.sendAnnouncement(player.name + (getAFK(player) ? " está AFK! 😴" : " não está mais AFK!"),null,(getAFK(player) ? 0xFF5E3B :
+			0x26DF17));
 			getAFK(player) ? updateRoleOnPlayerOut() : updateRoleOnPlayerIn();
 		}
 		else if (["!afks", "!afklist"].includes(message[0].toLowerCase())) {
@@ -1117,7 +1135,7 @@
 			if (player.admin) {
 				if (message.length == 1) {
 					room.clearBans();
-					room.sendChat("📜 Lista de banimentos foi limpa!");
+					room.sendChat("[📜] Lista de banimentos foi limpa!");
 					banList = [];
 				}
 				if (message.length == 2) {
@@ -1137,7 +1155,7 @@
 		else if (["!bb", "!bye", "!cya", "!gn"].includes(message[0].toLowerCase())) {
 			room.kickPlayer(player.id, "Até a próxima, jogador!", false);
 		}
-		else if (["!disc"].includes(message[0].toLowerCase())) {
+		else if (["!dc", "!disc", "!discord"].includes(message[0].toLowerCase())) {
 			room.sendChat("Entre no nosso discord: https://discord.gg/");
 		}
 
@@ -1227,36 +1245,40 @@
 			}
 		}
 
+		if (localStorage.getItem(getAuth(player)) && JSON.parse(localStorage.getItem(getAuth(player)))[Ss.RL] == "master") {
+			room.sendAnnouncement("「𝐃𝐎𝐍𝐎」" + player.name + ": " + msg + "", null, 0xAA0D25)
+			return false;
+		}
         if (localStorage.getItem(getAuth(player))){ // elo definido por vitórias
             stats = JSON.parse(localStorage.getItem(getAuth(player)));
             if (stats[Ss.WI] > 399){
-            room.sendAnnouncement("🔥 「𝐆𝐎𝐀𝐓」" + player.name + ": " + msg + "", null, 0xFF8000)
+            room.sendAnnouncement("👑 「𝐋𝐞𝐧𝐝𝐚」" + player.name + ": " + msg + "", null, 0x7E65FF)
             } else if (stats[Ss.WI] > 199){
-            room.sendAnnouncement("🔸 「𝗦𝘂𝗽𝗲𝗿-𝗘𝘀𝘁𝗿𝗲𝗹𝗹𝗮」:" + player.name + ": " + msg + "", null, 0x0040FF)
+            room.sendAnnouncement("🏅 「𝗣𝗹𝗮𝘁𝗶𝗻𝗮 𝐈𝐈𝐈」:" + player.name + ": " + msg + "", null, 0x62AEE3)
             } else if (stats[Ss.WI] > 179){
-            room.sendAnnouncement("🔹 「𝗘𝘀𝘁𝗿𝗲𝗹𝗹𝗮」" + player.name + ": " + msg + "", null, 0xFF7900)
+            room.sendAnnouncement("🏅 「𝗣𝗹𝗮𝘁𝗶𝗻𝗮 𝐈𝐈」" + player.name + ": " + msg + "", null, 0x62AEE3)
             } else if (stats[Ss.WI] > 159){
-            room.sendAnnouncement("✓ 「𝗖𝗮𝗺𝗽𝗲𝗼𝗻」" + player.name + ": " + msg + "", null, 0xFFFF00)
+            room.sendAnnouncement("🏅 「𝗣𝗹𝗮𝘁𝗶𝗻𝗮 𝐈」" + player.name + ": " + msg + "", null, 0x62AEE3)
             } else if (stats[Ss.WI] > 129){
-            room.sendAnnouncement("👑 「𝗖𝗿𝗮𝗰𝗸」" + player.name + ": " + msg + "", null, 0xFFC375)
+            room.sendAnnouncement("🥇 「𝗢𝘂𝗿𝗼 𝐈𝐈𝐈」" + player.name + ": " + msg + "", null, 0xEAC274)
             } else if (stats[Ss.WI] > 89){
-            room.sendAnnouncement("💲 「𝗟𝗲𝘆𝗲𝗻𝗱𝗮」" + player.name + ": " + msg + "", null, 0xBFFF00)
+            room.sendAnnouncement("🥇 「𝗢𝘂𝗿𝗼 𝐈𝐈」" + player.name + ": " + msg + "", null, 0xEAC274)
             } else if (stats[Ss.WI] > 69){
-            room.sendAnnouncement("👿 「𝐄𝐱𝐩𝐞𝐫𝐭𝐨」" + player.name + ": " + msg + "", null, 0xEC77CE)
+            room.sendAnnouncement("🥇 「𝗢𝘂𝗿𝗼 𝐈」" + player.name + ": " + msg + "", null, 0xEAC274)
             } else if (stats[Ss.WI] > 59){
-            room.sendAnnouncement("💪 「𝗥𝗲𝘃𝗲𝗹𝗮𝗰𝗶𝗼𝗻」" + player.name + ": " + msg + "", null, 0xFA58DF)
+            room.sendAnnouncement("🥈 「𝗣𝗿𝗮𝘁𝗮 𝐈𝐈𝐈」" + player.name + ": " + msg + "", null, 0xA2A2A2)
             } else if (stats[Ss.WI] > 44){
-            room.sendAnnouncement("👽 「𝗩𝗲𝘁𝗲𝗿𝗮𝗻𝗼」" + player.name + ": " + msg + "", null, 0x73EC59)
+            room.sendAnnouncement("🥈 「𝗣𝗿𝗮𝘁𝗮 𝐈𝐈」" + player.name + ": " + msg + "", null, 0xA2A2A2)
             } else if (stats[Ss.WI] > 34){
-            room.sendAnnouncement("👿 「𝗜𝗺𝗽𝗮𝗿𝗮𝗯𝗹𝗲」" + player.name + ": " + msg + "", null, 0xFE2E2E)
+            room.sendAnnouncement("🥈 「𝗣𝗿𝗮𝘁𝗮 𝐈」" + player.name + ": " + msg + "", null, 0xA2A2A2)
             } else if (stats[Ss.WI] > 24){
-            room.sendAnnouncement("⚽ 「𝗣𝗿𝗼𝗳𝗲𝘀𝗶𝗼𝗻𝗮𝗹」" + player.name + ": " + msg + "", null, 0x04B404)
+            room.sendAnnouncement("🥉 「𝗕𝗿𝗼𝗻𝘇𝗲 𝐈𝐈𝐈」" + player.name + ": " + msg + "", null, 0x72532A)
             } else if (stats[Ss.WI] > 14){
-            room.sendAnnouncement("😎 「𝗔𝗽𝗿𝗲𝗻𝗱𝗶𝘇」" + player.name + ": " + msg + "", null, 0x2EFEF7)
+            room.sendAnnouncement("🥉 「𝗕𝗿𝗼𝗻𝘇𝗲 𝐈𝐈」" + player.name + ": " + msg + "", null, 0x72532A)
             } else if (stats[Ss.WI] > 4){
-            room.sendAnnouncement("🎖️ 「𝗣𝗿𝗶𝗻𝗰𝗶𝗽𝗶𝗮𝗻𝘁𝗲」" + player.name + ": " + msg + "", null, 0xDDD4DB)
+            room.sendAnnouncement("🥉 「𝗕𝗿𝗼𝗻𝘇𝗲 𝐈」" + player.name + ": " + msg + "", null, 0x72532A)
             } else {
-            room.sendAnnouncement("㋡ 「𝗜𝗻𝗶𝗰𝗶𝗮𝗻𝘁𝗲」"  + player.name + ": " + msg + "", null, 0xDDD4DB)
+            room.sendAnnouncement("㋡ 「𝗦𝗲𝗺 𝗿𝗮𝗻𝗸」"  + player.name + ": " + msg + "", null, 0x7aa476)
             }
             return false;
             }
@@ -1562,18 +1584,18 @@
 		if (lastPlayersTouched[1] != null && lastPlayersTouched[1].team == team) {
 			var frasegol = frasesGOL[(Math.random() * frasesGOL.length) | 0]
 			var fraseasis = frasesASS[(Math.random() * frasesASS.length) | 0]
-				room.sendChat("⚽👥 " + getTime(scores) + frasegol + lastPlayersTouched[0].name + fraseasis + lastPlayersTouched[1].name + " | Velocidade do chute: " + ballSpeed.toPrecision(4).toString() + "km/h " + (team == Team.RED ? "🔴" : "🔵"));
+			room.sendAnnouncement("⚽👥 " + getTime(scores) + frasegol + lastPlayersTouched[0].name + fraseasis + lastPlayersTouched[1].name + " | Velocidade do chute: " + ballSpeed.toPrecision(4).toString() + "km/h " + (team == Team.RED ? "🔴" : "🔵"),null,(team == Team.RED ? Cor.Vermelho : Cor.Azul),'bold');
 				game.goals.push(new Goal(scores.time, team, lastPlayersTouched[0], lastPlayersTouched[1]));
 			}
 			else {
 				var frasegol = frasesGOL[(Math.random() * frasesGOL.length) | 0]
-				room.sendChat("⚽ " + getTime(scores) + frasegol + lastPlayersTouched[0].name + "! | Velocidade do chute: " + ballSpeed.toPrecision(4).toString() + "km/h " + (team == Team.RED ? "🔴" : "🔵"));
+				room.sendAnnouncement("⚽ " + getTime(scores) + frasegol + lastPlayersTouched[0].name + "! | Velocidade do chute: " + ballSpeed.toPrecision(4).toString() + "km/h " + (team == Team.RED ? "🔴" : "🔵"),null,(team == Team.RED ? Cor.Vermelho : Cor.Azul),'bold');
 				game.goals.push(new Goal(scores.time, team, lastPlayersTouched[0], null));
 			}
 		}
 		else {
 			var fraseautogol = golcontra[(Math.random() * golcontra.length) | 0]
-			room.sendChat("🤡 " + getTime(scores) + fraseautogol + lastPlayersTouched[0].name + "! | Velocidade do chute: " + ballSpeed.toPrecision(4).toString() + "km/h " + (team == Team.RED ? "🔴" : "🔵"));
+			room.sendAnnouncement("🤡 " + getTime(scores) + fraseautogol + lastPlayersTouched[0].name + "! | Velocidade do chute: " + ballSpeed.toPrecision(4).toString() + "km/h " + (team == Team.RED ? "🔴" : "🔵"),null,(team == Team.RED ? Cor.Vermelho : Cor.Azul),'bold');
 			game.goals.push(new Goal(scores.time, team, null, null));
 		}
 		if (scores.scoreLimit != 0 && (scores.red == scores.scoreLimit || scores.blue == scores.scoreLimit && scores.blue > 0 || goldenGoal == true)) {
