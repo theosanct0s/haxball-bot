@@ -21,6 +21,8 @@ This simple bot has some features, among them are:
 - ✅ Ban system
   
 ### 📬 [09/28/22] Changelog: 
+- 🌟 Team Chat
+  - Send messages only to players on your team
 - 🌟 Messages
   - Changes to some messages (room.sendAnnouncement, colors and others)
 - 🌟 Randomized uniform system
@@ -33,7 +35,6 @@ This simple bot has some features, among them are:
   - Record your desired match and send it directly to your Discord server using a Webhook
 - ⏳ Register / login system
   - Being able to use MongoDB or not
-- ⏳ Send a message to the team only
 - ⏳ Store system
 - ⏳ Slots reserved for VIPs/Staff
 
