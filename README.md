@@ -20,13 +20,13 @@ This simple bot has some features, among them are:
 - ✅ Admin system
 - ✅ Ban system
   
-### 📬 [09/24/22] New features: 
-- 🌟 Insult filter
-  - Block unwanted words for your server
+### 📬 [09/28/22] Changelog: 
+- 🌟 Messages
+  - Changes to some messages (room.sendAnnouncement, colors and others)
 - 🌟 Randomized uniform system
-  - With each new match, both teams' uniforms are changed randomly (customizable uniforms)
+  - Changes in uniforms, known and more beautiful uniforms
 - 🌟 Ranking system
-  - Ranking system by the number of player goals (customizable)
+  - New names for the ranks
 
 ### 📪 It's coming:
 - ⏳ Game recording system
@@ -35,7 +35,7 @@ This simple bot has some features, among them are:
   - Being able to use MongoDB or not
 - ⏳ Send a message to the team only
 - ⏳ Store system
-- ⏳ Slots reserved for VIPs/staff
+- ⏳ Slots reserved for VIPs/Staff
 
 and much more!
 
