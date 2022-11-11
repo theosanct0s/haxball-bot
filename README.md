@@ -20,7 +20,12 @@ This simple bot has some features, among them are:
 - ✅ Admin system
 - ✅ Ban system
   
-### 📬 [09/28/22] Changelog: 
+### 📬 [11/11/2022] Changelog:
+- 🌟 Game recording system
+  - Record your desired match and send it directly to your Discord server using a [Webhook](https://www.youtube.com/watch?v=fKksxz2Gdnc)
+  - *To change the Webhook link, search for "CHANGEWEBHOOK" in your code editor*
+- 🌟 Avatar Reaction
+  - Reaction of "⚽" in the avatars of the team that scored the goal
 - 🌟 Team Chat
   - Send messages only to players on your team
 - 🌟 Messages
@@ -31,8 +36,6 @@ This simple bot has some features, among them are:
   - New names for the ranks
 
 ### 📪 It's coming:
-- ⏳ Game recording system
-  - Record your desired match and send it directly to your Discord server using a Webhook
 - ⏳ Register / login system
   - Being able to use MongoDB or not
 - ⏳ Store system
@@ -50,9 +53,10 @@ If you are interested in using this bot, you need to know a few things!
 
 1. Open the [Haxball Headless Page](https://www.haxball.com/headless)
 2. Open devtools using F12 and select the console
-3. Copy ALL your code from `haxbot.js` and paste in console
-4. For the room to finish opening, complete the captcha
-5. The room is now open, copy or enter the link that the page gives you (keep the HaxBall Headless tab open)
+3. Edit the bot as you like
+4. Copy ALL your code from `haxbot.js` and paste in console
+5. For the room to finish opening, complete the captcha
+6. The room is now open, copy or enter the link that the page gives you (keep the HaxBall Headless tab open)
 
 Remembering that you can use and abuse this bot as you want, I'm posting it here especially for people who want a template like this, or people who don't know how to program and want to create a room. So enjoy! 🥰
 
