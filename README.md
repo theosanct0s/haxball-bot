@@ -21,7 +21,7 @@ This simple bot has some features, among them are:
 - ✅ Ban system
   
 ### 📬 [11/11/2022] Changelog:
-- 🌟 Game recording system
+- 🌟 Game recording system / Input log
   - Record your desired match and send it directly to your Discord server using a [Webhook](https://www.youtube.com/watch?v=fKksxz2Gdnc)
   - *To change the Webhook link, search for "CHANGEWEBHOOK" in your code editor*
 - 🌟 Avatar Reaction
