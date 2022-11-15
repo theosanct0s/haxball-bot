@@ -58,6 +58,15 @@ If you are interested in using this bot, you need to know a few things!
 5. For the room to finish opening, complete the captcha
 6. The room is now open, copy or enter the link that the page gives you (keep the HaxBall Headless tab open)
 
+### 🔗 How to use webhook on your server
+
+Follow these steps to connect your room to your Discord server to show logs and send match replays
+
+1. Create your Discord server or use one where you have admin rights
+2. Create a channel for logs (with permissions only for admins) and one for replays
+3. For each channel, create a [webhook](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks) and copy their links
+4. Replace `CHANGEWEBHOOK` by the webhook link of your log/replay channel
+
 Remembering that you can use and abuse this bot as you want, I'm posting it here especially for people who want a template like this, or people who don't know how to program and want to create a room. So enjoy! 🥰
 
 If you enjoy the bot, consider giving it a star to show your appreciation ❤️
