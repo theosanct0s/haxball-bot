@@ -1,10 +1,10 @@
 <h1 align="center">⚽🤖 HaxBallBOT</h1>
 
-<p align="center">Ready-to-go scripts and functions for the HaxBall Headless API!</p>
+<p align="center">Ready-to-go Advanced HaxBall bot using Headless API!</p>
 
 
 ### 🤔 About
-- A bot to organize both your room 100% automatic
+- A bot to organize your room 100% automatic
 - This project is from my room. I'm releasing to everyone 🙂
 
 ### ✨ What is included?
@@ -17,10 +17,14 @@ This simple bot has some features, among them are:
   - Every goal (both teams) will be notified in the chat, with the author and the speed of the shot.
 - ✅ End of game announcements
   - Notifies you when the match is over, with advanced statistics
+- ✅ Webhook integration
+- ✅ Replay and log system using webhook
 - ✅ Admin system
 - ✅ Ban system
+
+and much more!
   
-### 📬 [11/11/2022] Changelog:
+### 📬 [11/11/2022] Changelog
 - 🌟 Game recording system / Input log
   - Record your desired match and send it directly to your Discord server using a [Webhook](https://www.youtube.com/watch?v=fKksxz2Gdnc)
   - *To change the Webhook link, search for "CHANGEWEBHOOK" in your code editor*
@@ -35,13 +39,11 @@ This simple bot has some features, among them are:
 - 🌟 Ranking system
   - New names for the ranks
 
-### 📪 It's coming:
+### 📪 It's coming...
 - ⏳ Register / login system
   - Being able to use MongoDB or not
 - ⏳ Store system
 - ⏳ Slots reserved for VIPs/Staff
-
-and much more!
 
 ### 🔧 Getting Started
 
@@ -58,7 +60,7 @@ If you are interested in using this bot, you need to know a few things!
 5. For the room to finish opening, complete the captcha
 6. The room is now open, copy or enter the link that the page gives you (keep the HaxBall Headless tab open)
 
-### 🔗 How to use webhook on your server
+### 🔗 How to use webhook on your room
 
 Follow these steps to connect your room to your Discord server to show logs and send match replays
 
