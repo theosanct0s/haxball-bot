@@ -1,4 +1,4 @@
-<h1 align="center">⚽ HaxBallBOT ⚽</h1>
+<h1 align="center">⚽ HaxBall Bot ⚽</h1>
 
 <p align="center">Ready-to-go Advanced HaxBall bot using Headless API</p>
 
