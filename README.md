@@ -1,6 +1,6 @@
-<h1 align="center">⚽🤖 HaxBallBOT</h1>
+<h1 align="center">⚽ HaxBallBOT ⚽</h1>
 
-<p align="center">Ready-to-go Advanced HaxBall bot using Headless API!</p>
+<p align="center">Ready-to-go Advanced HaxBall bot using Headless API</p>
 
 
 ### 🤔 About
@@ -9,7 +9,7 @@
 
 ### ✨ What is included?
 
-This simple bot has some features, among them are:
+This advanced bot has several features some of them are:
 
 - ✅ Start of match notice
   - When the match starts, the bot notifies you in the chat.
@@ -22,9 +22,9 @@ This simple bot has some features, among them are:
 - ✅ Admin system
 - ✅ Ban system
 
-and much more!
+and much more...
   
-### 📬 [11/11/2022] Changelog
+### 📬 [11/11/2022] • Changelog
 - 🌟 Game recording system / Input log
   - Record your desired match and send it directly to your Discord server using a [Webhook](https://www.youtube.com/watch?v=fKksxz2Gdnc)
   - *To change the Webhook link, search for "CHANGEWEBHOOK" in your code editor*
@@ -51,7 +51,7 @@ If you are interested in using this bot, you need to know a few things!
 
 - The room with the BOT can be created from the following integration [Headless Host](https://github.com/haxball/haxball-issues/wiki/Headless-Host), just open a normal browser page at this link [Headless Host Site](https://html5.haxball.com/headless) and put the BOT code in the console of that page.
 
-### 🖥️ Local machine - [Tutorial (SOON)](https://www.youtube.com)
+### 🖥️ Local machine • [Tutorial (SOON)](https://www.youtube.com)
 
 1. Open the [Haxball Headless Page](https://www.haxball.com/headless)
 2. Open devtools using F12 and select the console
