@@ -31,7 +31,7 @@ and much more...
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#table-of-contents)
 
-## ➤ [25/03/2023] • Changelog
+## ➤ [27/03/2023] • Changelog
 - ⭐ Game recording system / Input log
   - Record your desired match and send it directly to your Discord server using a [Webhook](https://www.youtube.com/watch?v=fKksxz2Gdnc)
   - *To change the Webhook link, search for "CHANGEWEBHOOK" in your code editor*
@@ -47,6 +47,7 @@ and much more...
   - New names for the ranks
 - 🌟 New README
   - Just a new README :)
+- 🌟 Bot version in languages: Portuguese and English!
  
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#table-of-contents) 
   
