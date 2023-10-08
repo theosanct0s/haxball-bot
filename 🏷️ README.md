@@ -1,7 +1,7 @@
 <h1 align="center">⚽ HaxBall Bot ⚽</h1>
 
 <p align="center">
-  <b>A bot to organize your room 100% automatic</b></br>
+  <b>A multilingual bot to organize your room 100% automatically</b></br>
   <sub>This project is from my room. I'm releasing to everyone 🙂<sub>
 </p>
 
@@ -22,7 +22,7 @@ This advanced bot has several features some of them are:
 - ✅ End of game announcements
   - Notifies you when the match is over, with advanced statistics
 - ✅ Webhook integration
-- ✅ Replay and log system using webhook
+- ✅ Replay and log system using [webhook](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 - ✅ Admin system
 - ✅ Ban system
   
@@ -31,33 +31,21 @@ and much more...
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#table-of-contents)
 
-## ➤ [27/03/2023] • Changelog
-- ⭐ Game recording system / Input log
-  - Record your desired match and send it directly to your Discord server using a [Webhook](https://www.youtube.com/watch?v=fKksxz2Gdnc)
-  - *To change the Webhook link, search for "CHANGEWEBHOOK" in your code editor*
-- ⭐ Avatar Reaction
-  - Reaction of "⚽" in the avatars of the team that scored the goal
-- ⭐ Team Chat
-  - Send messages only to players on your team
-- ⭐ Messages
-  - Changes to some messages (room.sendAnnouncement, colors and others)
-- ⭐ Randomized uniform system
-  - Changes in uniforms, known and more beautiful uniforms
-- ⭐ Ranking system
-  - New names for the ranks
+## ➤ [07/10/2023] • Changelog
 - 🌟 New README
   - Just a new README :)
-- 🌟 Bot version in languages: Portuguese and English!
+- 🌟 The bot now supports new languages: Portuguese and English!
  
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#table-of-contents) 
   
 ## ➤ It's coming...
+- ⏳ New goal messages among others
+- ⏳ New avatar system when a player scores a goal
 - ⏳ Position system for players
 - ⏳ Pause system for team captains
 - ⏳ Adding localStorage
 - ⏳ Register / login system
   - Being able to use MongoDB or not
-- ⏳ Store system
 - ⏳ Slots reserved for VIPs/Staff
    
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#table-of-contents) 
@@ -66,7 +54,7 @@ and much more...
 
 If you are interested in using this bot, you need to know a few things!
 
-- The room with the BOT can be created from the following integration [Headless Host](https://github.com/haxball/haxball-issues/wiki/Headless-Host), just open a normal browser page at this link [Headless Host Site](https://html5.haxball.com/headless) and put the BOT code in the console of that page.
+- The room with the bot can be created from the following integration [Headless Host](https://github.com/haxball/haxball-issues/wiki/Headless-Host), just open a normal browser page at this link [Headless Host Site](https://html5.haxball.com/headless) and put the bot code in the console of that page.
  
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#table-of-contents) 
   
@@ -74,10 +62,9 @@ If you are interested in using this bot, you need to know a few things!
 
 1. Open the [Haxball Headless Page](https://www.haxball.com/headless)
 2. Open devtools using F12 and select the console
-3. Edit the bot as you like
-4. Copy ALL your code from `haxbot.js` and paste in console
-5. For the room to finish opening, complete the captcha
-6. The room is now open, copy or enter the link that the page gives you (keep the HaxBall Headless tab open)
+3. Copy ALL your code from `haxbot-EN.js` or `haxbot-PTBR.js` and paste in console
+4. For the room to finish opening, complete the captcha
+5. The room is now open, copy or enter the link that the page gives you (You need to keep the website open for the room to stay open)
  
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#table-of-contents) 
   
