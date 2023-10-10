@@ -7,9 +7,9 @@
 
 |Table of contents|
 |-----------------|
-|[What is included in the bot?](https://github.com/theosanct0s/haxball-bot#➤-What-is-included?)
-|[It's coming](https://github.com/theosanct0s/haxball-bot#➤-It's-coming...) |
-|[Getting Started](https://github.com/theosanct0s/haxball-bot#➤-Getting-Started)  |
+|[What is included in the bot?](https://github.com/theosanct0s/haxball-bot#-What-is-included?)
+|[It's coming](https://github.com/theosanct0s/haxball-bot#-It's-coming...) |
+|[Getting Started](https://github.com/theosanct0s/haxball-bot#-Getting-Started)  |
 |[Translations](https://github.com/theosanct0s/haxball-bot#current-translations) |
 
 ## ➤ What is included?
