@@ -28,6 +28,7 @@ This advanced bot has several features some of them are:
   - Every goal (both teams) will be notified in the chat, with the author and the speed of the shot.
 - ✅ End of game announcements
   - Notifies you when the match is over, with advanced statistics
+- ✅ The bot has two languages
 - ✅ Uniforms to make you feel like a real player
 - ✅ Reaction system with emojis, when the player scores a goal
 - ✅ Admin system
@@ -57,6 +58,7 @@ and much more...
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#table-of-contents) 
   
 ## ➤ It's coming...
+- ⏳ Own and customized stadium
 - ⏳ Betting system
 - ⏳ MVP system for the best player on the field
 - ⏳ Position system for players
@@ -65,6 +67,7 @@ and much more...
 - ⏳ Register / login system
   - Being able to use MongoDB or not
 - ⏳ Slots reserved for VIPs/Staff
+- ❤️ More translations
    
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#table-of-contents) 
   
